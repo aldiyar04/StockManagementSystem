@@ -52,15 +52,15 @@ public class User {
     public enum Role {
         ADMIN("ADMIN"), SALESMAN("SALESMAN");
 
-        private final String name;
+        private final String value;
 
-        Role(String name) {
-            this.name = name;
+        Role(String value) {
+            this.value = value;
         }
 
         @Override
         public String toString() {
-            return name;
+            return value;
         }
     }
 }
