@@ -1,5 +1,6 @@
 package kz.iitu.itse1910.variant2issenbayev.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -24,6 +26,7 @@ import java.time.LocalDate;
 @Data
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,7 +50,11 @@ public class Customer {
     @Column(name = "bonus_balance", nullable = false)
     private BigDecimal bonusBalance;
 
-    @Column(name = "created_on", columnDefinition = "DATE DEFAULT CURRENT_DATE",
-            nullable = false, insertable = false, updatable = false)
+    @Column(name = "created_on", nullable = false, updatable = false)
     private LocalDate createdOn;
+
+    @PrePersist
+    public void setCreatedOn() {
+        createdOn = LocalDate.now();
+    }
 }

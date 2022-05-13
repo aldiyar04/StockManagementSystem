@@ -1,8 +1,8 @@
 package kz.iitu.itse1910.variant2issenbayev.entity;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -23,7 +24,7 @@ import java.time.LocalDateTime;
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 public class Transaction {
     @Id
@@ -39,13 +40,17 @@ public class Transaction {
     @Column(nullable = false)
     private Status status;
 
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT NOW()",
-            nullable = false, insertable = false, updatable = false)
-    private LocalDateTime createdAt;
-
     @ManyToOne
     @JoinColumn(name = "created_by", nullable = false, updatable = false)
     private User createdBy;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    public void setCreatedAt() {
+        createdAt = LocalDateTime.now();
+    }
 
     public enum Type {
         PURCHASE("PURCHASE"), SALE("SALE");

@@ -1,5 +1,6 @@
 package kz.iitu.itse1910.variant2issenbayev.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ import java.math.BigDecimal;
 @Data
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
