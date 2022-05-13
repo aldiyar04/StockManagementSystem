@@ -6,14 +6,39 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 @Transactional
 @AllArgsConstructor
+@SuppressWarnings("unchecked")
 public class UserRepository {
     private final SessionFactory sessionFactory;
+
+    public List<User> findAllByRole(User.Role role) {
+        return sessionFactory.getCurrentSession()
+                .createQuery("from User u where role = :role")
+                .setParameter("role", role)
+                .setHint("org.hibernate.cacheable", "true")
+                .list();
+    }
+
+    public Optional<User> findById(long id) {
+        return sessionFactory.getCurrentSession()
+                .createQuery("from User u where u.id = :id")
+                .setParameter("id", id)
+                .setHint("org.hibernate.cacheable", "true")
+                .uniqueResultOptional();
+    }
 
     public void save(User user) {
         sessionFactory.getCurrentSession()
                 .saveOrUpdate(user);
+    }
+
+    public void delete(User user) {
+        sessionFactory.getCurrentSession()
+                .delete(user);
     }
 }

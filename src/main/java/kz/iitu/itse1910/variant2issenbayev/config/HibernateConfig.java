@@ -1,5 +1,6 @@
 package kz.iitu.itse1910.variant2issenbayev.config;
 
+import kz.iitu.itse1910.variant2issenbayev.DatabaseInitializer;
 import lombok.AllArgsConstructor;
 import org.hibernate.SessionFactory;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -13,6 +14,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.Properties;
@@ -22,6 +24,12 @@ import java.util.Properties;
 @AllArgsConstructor
 public class HibernateConfig {
     private final ApplicationContext applicationContext;
+
+    @PostConstruct
+    public void populateDatabase() {
+        DatabaseInitializer dbInitializer = applicationContext.getBean(DatabaseInitializer.class);
+        dbInitializer.init();
+    }
 
     @Bean
     public PlatformTransactionManager transactionManager() throws IOException {

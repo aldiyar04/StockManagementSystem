@@ -30,7 +30,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private Role role;
 
     @Column(unique = true, nullable = false)
@@ -39,7 +39,7 @@ public class User {
     @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(columnDefinition = "CHAR(28)", nullable = false)
+    @Column(columnDefinition = "CHAR(60)", nullable = false)
     private String password;
 
     @Column(name = "fname", nullable = false)
