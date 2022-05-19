@@ -32,9 +32,26 @@ public class UserRepository {
                 .uniqueResultOptional();
     }
 
-    public void save(User user) {
+    public Optional<User> findByEmail(String email) {
+        return sessionFactory.getCurrentSession()
+                .createQuery("from User u where u.email = :email")
+                .setParameter("email", email)
+                .setHint("org.hibernate.cacheable", "true")
+                .uniqueResultOptional();
+    }
+
+    public Optional<User> findByUsername(String username) {
+        return sessionFactory.getCurrentSession()
+                .createQuery("from User u where u.username = :username")
+                .setParameter("username", username)
+                .setHint("org.hibernate.cacheable", "true")
+                .uniqueResultOptional();
+    }
+
+    public User save(User user) {
         sessionFactory.getCurrentSession()
                 .saveOrUpdate(user);
+        return user;
     }
 
     public void delete(User user) {

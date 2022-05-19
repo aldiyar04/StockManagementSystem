@@ -3,7 +3,7 @@ package kz.iitu.itse1910.variant2issenbayev;
 import kz.iitu.itse1910.variant2issenbayev.entity.User;
 import kz.iitu.itse1910.variant2issenbayev.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -11,12 +11,12 @@ import java.util.List;
 
 @Component
 @AllArgsConstructor
-public class DatabaseInitializer {
+public class DatabaseInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public void init() {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
+    @Override
+    public void run(String... args) throws Exception {
         // Save users
         User admin = User.builder()
                 .role(User.Role.ADMIN)

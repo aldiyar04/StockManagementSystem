@@ -1,4 +1,4 @@
-package kz.iitu.itse1910.variant2issenbayev.dto;
+package kz.iitu.itse1910.variant2issenbayev.dto.response;
 
 import kz.iitu.itse1910.variant2issenbayev.entity.User;
 import lombok.Builder;
@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Data
 @Builder
-public class UserDto {
+public class UserResp {
     private final Long id;
     private final User.Role role;
     private final String email;

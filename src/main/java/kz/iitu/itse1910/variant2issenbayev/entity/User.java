@@ -10,12 +10,16 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -51,9 +55,17 @@ public class User {
     @Column(name = "created_on", nullable = false, updatable = false)
     private LocalDate createdOn;
 
+    @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
+    private List<Transaction> transactions;
+
     @PrePersist
-    public void setCreatedOn() {
+    private void setCreatedOn() {
         createdOn = LocalDate.now();
+    }
+
+    @PreRemove
+    public void preRemove() {
+        transactions.forEach(tx -> tx.setCreatedBy(null));
     }
 
     public enum Role {
