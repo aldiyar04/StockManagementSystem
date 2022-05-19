@@ -25,7 +25,7 @@ public class JwtUtil {
 
     public String generateToken(User user) {
         // Map.of() is immutable, which causes an exception
-        Map<String, Object> claims = new HashMap<>(Map.of("username", user.getUsername()));
+        Map<String, Object> claims = new HashMap<>(Map.of("id", user.getId()));
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -35,12 +35,12 @@ public class JwtUtil {
                 .compact();
     }
 
-    public String getUsername(String token) {
+    public Long getUserId(String token) {
         return Jwts.parser()
                 .setSigningKey(jwtProps.getSecret())
                 .parseClaimsJws(token)
                 .getBody()
-                .get("username", String.class);
+                .get("id", Long.class);
     }
 
     public boolean validate(String token) {

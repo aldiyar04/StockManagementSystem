@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -66,6 +67,15 @@ public class User {
     @PreRemove
     public void preRemove() {
         transactions.forEach(tx -> tx.setCreatedBy(null));
+    }
+
+    public boolean isAdmin() {
+        return role == Role.ADMIN;
+    }
+
+    public boolean hasAssociatedTransactions() {
+        Hibernate.initialize(this);
+        return transactions.isEmpty();
     }
 
     public enum Role {

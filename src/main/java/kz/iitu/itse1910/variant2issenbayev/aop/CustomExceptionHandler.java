@@ -47,5 +47,4 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     public final ResponseEntity<ErrorResp> handleAllExceptions(Exception ex, WebRequest request) {
         return delegate.handleAllExceptions(ex);
     }
-
 }

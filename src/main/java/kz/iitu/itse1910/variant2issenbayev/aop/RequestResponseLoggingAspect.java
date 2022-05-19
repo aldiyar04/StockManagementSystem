@@ -4,7 +4,7 @@ package kz.iitu.itse1910.variant2issenbayev.aop;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.After;
@@ -27,7 +27,7 @@ import java.util.stream.IntStream;
 
 @Aspect
 @Component
-@Slf4j
+@Log4j2
 @AllArgsConstructor
 public class RequestResponseLoggingAspect {
     private final HttpServletRequest request;
@@ -55,7 +55,8 @@ public class RequestResponseLoggingAspect {
         if (isMethodNonVoid(joinPoint.getSignature())) {
             return;
         }
-        String details = getRequestDetails() + getResponseDetails(null);
+        String details = getRequestDetails();
+        details += "; status: " + getHttpStatusString();
         log.info("RESPONSE: " + details);
     }
 
@@ -64,13 +65,7 @@ public class RequestResponseLoggingAspect {
         if (retVal == null) {
             return;
         }
-        Object respBody = retVal;
-        if (retVal instanceof ResponseEntity) {
-            ResponseEntity<?> respEntity = (ResponseEntity<?>) retVal;
-            respBody = respEntity.getBody();
-        }
-
-        String details = getRequestDetails() + getResponseDetails(respBody);
+        String details = getRequestDetails() + getResponseDetails(retVal);
         log.info("RESPONSE: " + details);
     }
 
@@ -109,15 +104,26 @@ public class RequestResponseLoggingAspect {
                 .findFirst();
     }
 
-    private String getResponseDetails(Object responseBody) {
-        String respDetails = "; status: " + getResponseHttpStatus();
+    private String getResponseDetails(Object retVal) {
+        String httpStatus;
+        Object responseBody;
+        if (retVal instanceof ResponseEntity) {
+            ResponseEntity<?> respEntity = (ResponseEntity<?>) retVal;
+            httpStatus = respEntity.getStatusCode().toString();
+            responseBody = respEntity.getBody();
+        } else {
+            httpStatus = getHttpStatusString();
+            responseBody = retVal;
+        }
+
+        String respDetails = "; status: " + httpStatus;
         if (responseBody != null) {
             respDetails += "; response body: " + toJson(responseBody);
         }
         return respDetails;
     }
 
-    private String getResponseHttpStatus() {
+    private String getHttpStatusString() {
         int status = response.getStatus();
         return HttpStatus.valueOf(status).toString();
     }

@@ -43,5 +43,11 @@ public class DatabaseInitializer implements CommandLineRunner {
                 .lastName("Pack")
                 .build();
         List.of(admin, salesman1, salesman2).forEach(userRepository::save);
+
+//        SaleTransaction saleTx = SaleTransaction.builder()
+//                .netAmount(new BigDecimal("4000"))
+//                .status(Transaction.Status.COMPLETED)
+//                .createdBy(salesman1)
+//                .build();
     }
 }
