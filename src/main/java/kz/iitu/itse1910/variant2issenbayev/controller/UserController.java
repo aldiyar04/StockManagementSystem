@@ -70,8 +70,8 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<?> deleteUser(@PathVariable("id") long id) {
         userService.deleteUser(id);
-        // Not using @ResponseStatus since it doesn't get caught by RequestResponseLoggingAspect,
-        // whereas that's not the case with ResponseEntity.
+        // Not using @ResponseStatus since it doesn't let the right HTTP status
+        // to be caught by RequestResponseLoggingAspect
         return ResponseEntity.noContent().build();
     }
 }

@@ -74,7 +74,7 @@ public class User {
     }
 
     public boolean hasAssociatedTransactions() {
-        Hibernate.initialize(this);
+        Hibernate.initialize(transactions);
         return transactions.isEmpty();
     }
 

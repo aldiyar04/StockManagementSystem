@@ -49,9 +49,7 @@ public class UserService {
         user.setPassword(
                 passwordEncoder.encode(signupReq.getPassword())
         );
-
-        User savedUser = userRepository.save(user);
-        return UserMapper.INSTANCE.toDto(savedUser);
+        return saveUserAndMapToResp(user);
     }
 
     public void changePassword(long id, UserPasswdChangeReq passwdChangeReq) {
@@ -80,8 +78,7 @@ public class UserService {
         }
 
         UserMapper.INSTANCE.updateEntityFromDto(user, userUpdateReq);
-        User updatedUser = userRepository.save(user);
-        return UserMapper.INSTANCE.toDto(updatedUser);
+        return saveUserAndMapToResp(user);
     }
 
     public void deleteUser(long id) {
@@ -92,7 +89,7 @@ public class UserService {
             errMsg = "Admin cannot be deleted";
         } else if (user.hasAssociatedTransactions()) {
             errMsg = "User " + user.getUsername() + " cannot be deleted " +
-                    "since there are transactions associated with them.";
+                    "since there are transactions associated with them";
         }
         if (!errMsg.isEmpty()) {
             throw new RecordUndeletableException(errMsg);
@@ -103,7 +100,7 @@ public class UserService {
 
     private User getByIdOrThrow(long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("User with id " + id + " does not exist."));
+                .orElseThrow(() -> new RecordNotFoundException("User with id " + id + " does not exist"));
     }
 
     private void throwIfAlreadyTaken(String email, String username) {
@@ -117,5 +114,10 @@ public class UserService {
         if (!errDetails.isEmpty()) {
             throw new RecordAlreadyExistsException(errDetails);
         }
+    }
+
+    private UserResp saveUserAndMapToResp(User user) {
+        user = userRepository.save(user);
+        return UserMapper.INSTANCE.toDto(user);
     }
 }

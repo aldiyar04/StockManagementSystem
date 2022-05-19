@@ -76,9 +76,9 @@ public class HibernateConfig {
         props.put("hibernate.cache.region.factory_class", "org.hibernate.cache.jcache.JCacheRegionFactory");
 
         // Show SQL
-//        props.put("hibernate.format_sql", true);
-//        props.put("hibernate.use_sql_comments", true);
-//        props.put("hibernate.show_sql", true);
+        props.put("hibernate.format_sql", true);
+        props.put("hibernate.use_sql_comments", true);
+        props.put("hibernate.show_sql", true);
 
         // Fetching
         props.put("hibernate.max_fetch_depth", 3);

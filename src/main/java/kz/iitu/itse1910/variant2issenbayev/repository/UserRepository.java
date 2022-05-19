@@ -49,13 +49,11 @@ public class UserRepository {
     }
 
     public User save(User user) {
-        sessionFactory.getCurrentSession()
-                .saveOrUpdate(user);
+        sessionFactory.getCurrentSession().saveOrUpdate(user);
         return user;
     }
 
     public void delete(User user) {
-        sessionFactory.getCurrentSession()
-                .delete(user);
+        sessionFactory.getCurrentSession().delete(user);
     }
 }
