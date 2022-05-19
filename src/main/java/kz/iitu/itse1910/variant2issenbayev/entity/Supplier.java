@@ -64,10 +64,15 @@ public class Supplier {
         return products;
     }
 
+    public List<PurchaseTransaction> fetchTransactions() {
+        Hibernate.initialize(transactions);
+        return transactions;
+    }
+
+    // WHY CHECKING ONLY PRODUCTS AND NOT TRANSACTIONS AS WELL?
+    // If products there, no need to check if transactions exist,
+    // since there cannot be a transaction if there is no product.
     public boolean hasAssociatedProducts() {
-        // WHY CHECKING ONLY PRODUCTS AND NOT TRANSACTIONS AS WELL?
-        // If products there, no need to check if transactions exist,
-        // since there cannot be a transaction if there is no product.
         Hibernate.initialize(products);
         return !products.isEmpty();
     }

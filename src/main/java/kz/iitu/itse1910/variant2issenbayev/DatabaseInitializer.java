@@ -1,11 +1,13 @@
 package kz.iitu.itse1910.variant2issenbayev;
 
 import kz.iitu.itse1910.variant2issenbayev.entity.Category;
+import kz.iitu.itse1910.variant2issenbayev.entity.Customer;
 import kz.iitu.itse1910.variant2issenbayev.entity.Product;
 import kz.iitu.itse1910.variant2issenbayev.entity.Supplier;
 import kz.iitu.itse1910.variant2issenbayev.entity.Uom;
 import kz.iitu.itse1910.variant2issenbayev.entity.User;
 import kz.iitu.itse1910.variant2issenbayev.repository.CategoryRepository;
+import kz.iitu.itse1910.variant2issenbayev.repository.CustomerRepository;
 import kz.iitu.itse1910.variant2issenbayev.repository.SupplierRepository;
 import kz.iitu.itse1910.variant2issenbayev.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -24,6 +26,7 @@ public class DatabaseInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final SupplierRepository supplierRepository;
     private final CategoryRepository categoryRepository;
+    private final CustomerRepository customerRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -187,6 +190,33 @@ public class DatabaseInitializer implements CommandLineRunner {
         List<Category> categories = List.of(categoryCanned, categoryCondimentsSpices,
                 categoryFruits, categoryVegetables);
         categories.forEach(categoryRepository::save);
+
+
+        Customer customer1 = Customer.builder()
+                .firstName("Dominic")
+                .lastName("Roberts")
+                .phone("+1 (812) 853-2813")
+                .email("proberts@gmail.com")
+                .cardNumber("3594-3590-9064-1590")
+                .bonusBalance(new BigDecimal("0"))
+                .build();
+        Customer customer2 = Customer.builder()
+                .firstName("Theo")
+                .lastName("Ryan")
+                .phone("+1 (812) 853-2813")
+                .email("tryan@gmail.com")
+                .cardNumber("0460-6590-3489-6904")
+                .bonusBalance(new BigDecimal("0"))
+                .build();
+        Customer customer3 = Customer.builder()
+                .firstName("Stephen")
+                .lastName("Morales")
+                .phone("+1 (812) 853-2813")
+                .email("smorales@gmail.com")
+                .cardNumber("3599-8693-8954-5491")
+                .bonusBalance(new BigDecimal("0"))
+                .build();
+        List.of(customer1, customer2, customer3).forEach(customerRepository::save);
 
 //        SaleTransaction saleTx = SaleTransaction.builder()
 //                .netAmount(new BigDecimal("4000"))

@@ -4,20 +4,23 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "customers")
@@ -38,13 +41,13 @@ public class Customer {
     @Column(name = "lname", nullable = false)
     private String lastName;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String phone;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String email;
 
-    @Column(name = "card_number", columnDefinition = "CHAR(16)", unique = true, nullable = false)
+    @Column(name = "card_number", columnDefinition = "CHAR(19)", unique = true, nullable = false)
     private String cardNumber;
 
     @Column(name = "bonus_balance", nullable = false)
@@ -56,5 +59,22 @@ public class Customer {
     @PrePersist
     public void setCreatedOn() {
         createdOn = LocalDate.now();
+    }
+
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private List<SaleTransaction> transactions;
+
+    public List<SaleTransaction> fetchTransactions() {
+        Hibernate.initialize(transactions);
+        return transactions;
+    }
+
+    public boolean hasAssociatedTransactions() {
+        Hibernate.initialize(transactions);
+        return !transactions.isEmpty();
+    }
+
+    public String getFirstLastName() {
+        return firstName + " " + lastName;
     }
 }
