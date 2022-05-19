@@ -1,6 +1,8 @@
 package kz.iitu.itse1910.variant2issenbayev.controller;
 
-import kz.iitu.itse1910.variant2issenbayev.dto.SupplierDto;
+import kz.iitu.itse1910.variant2issenbayev.dto.request.SupplierCreationReq;
+import kz.iitu.itse1910.variant2issenbayev.dto.request.SupplierUpdateReq;
+import kz.iitu.itse1910.variant2issenbayev.dto.response.SupplierResp;
 import kz.iitu.itse1910.variant2issenbayev.service.SupplierService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,30 +27,28 @@ public class SupplierController {
     private final SupplierService supplierService;
 
     @GetMapping
-    public List<SupplierDto> getAllSuppliers() {
+    public List<SupplierResp> getAllSuppliers() {
         return supplierService.getAllSuppliers();
     }
 
     @GetMapping("/{id}")
-    public SupplierDto getSupplierById(@PathVariable("id") long id) {
+    public SupplierResp getSupplierById(@PathVariable("id") long id) {
         return supplierService.getSupplierById(id);
     }
 
     @PostMapping
-    public SupplierDto createSupplier(@Valid @RequestBody SupplierDto creationReq) {
+    public SupplierResp createSupplier(@Valid @RequestBody SupplierCreationReq creationReq) {
         return supplierService.createSupplier(creationReq);
     }
 
     @PutMapping("/{id}")
-    public SupplierDto updateSupplier(@PathVariable("id") long id, @Valid @RequestBody SupplierDto updateReq) {
+    public SupplierResp updateSupplier(@PathVariable("id") long id, @Valid @RequestBody SupplierUpdateReq updateReq) {
         return supplierService.updateSupplier(id, updateReq);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteSupplier(@PathVariable("id") long id) {
         supplierService.deleteSupplier(id);
-        // Not using @ResponseStatus since it doesn't let the right HTTP status
-        // to be caught by RequestResponseLoggingAspect
         return ResponseEntity.noContent().build();
     }
 }

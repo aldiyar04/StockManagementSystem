@@ -59,9 +59,16 @@ public class Supplier {
     @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY)
     private List<PurchaseTransaction> transactions;
 
-    public boolean hasAssociatedData() {
+    public List<Product> fetchProducts() {
         Hibernate.initialize(products);
-        Hibernate.initialize(transactions);
-        return !products.isEmpty() || !transactions.isEmpty();
+        return products;
+    }
+
+    public boolean hasAssociatedProducts() {
+        // WHY CHECKING ONLY PRODUCTS AND NOT TRANSACTIONS AS WELL?
+        // If products there, no need to check if transactions exist,
+        // since there cannot be a transaction if there is no product.
+        Hibernate.initialize(products);
+        return !products.isEmpty();
     }
 }

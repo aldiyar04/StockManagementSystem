@@ -42,7 +42,7 @@ public class TransactionProduct {
     private Product product;
 
     @Column(nullable = false, updatable = false)
-    private Integer quantity;
+    private BigDecimal quantity;
 
     @Column(name = "net_amount", nullable = false, updatable = false)
     private BigDecimal netAmount;

@@ -1,6 +1,7 @@
 package kz.iitu.itse1910.variant2issenbayev.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -17,6 +18,7 @@ import javax.persistence.Table;
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Data
+@NoArgsConstructor
 public class Uom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +32,10 @@ public class Uom {
 
     @Column(name = "conversion_rate", nullable = false, updatable = false)
     private Integer conversionRate;
+
+    public Uom(String purchaseUom, String saleUom, Integer conversionRate) {
+        this.purchaseUom = purchaseUom;
+        this.saleUom = saleUom;
+        this.conversionRate = conversionRate;
+    }
 }

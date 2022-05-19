@@ -2,7 +2,9 @@ package kz.iitu.itse1910.variant2issenbayev.repository;
 
 import kz.iitu.itse1910.variant2issenbayev.entity.User;
 import lombok.AllArgsConstructor;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +53,10 @@ public class UserRepository {
     public User save(User user) {
         sessionFactory.getCurrentSession().saveOrUpdate(user);
         return user;
+    }
+
+    public void saveAll(List<User> users) {
+        users.forEach(sessionFactory.getCurrentSession()::save);
     }
 
     public void delete(User user) {

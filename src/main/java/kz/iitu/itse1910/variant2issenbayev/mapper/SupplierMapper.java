@@ -1,6 +1,8 @@
 package kz.iitu.itse1910.variant2issenbayev.mapper;
 
-import kz.iitu.itse1910.variant2issenbayev.dto.SupplierDto;
+import kz.iitu.itse1910.variant2issenbayev.dto.request.SupplierCreationReq;
+import kz.iitu.itse1910.variant2issenbayev.dto.request.SupplierUpdateReq;
+import kz.iitu.itse1910.variant2issenbayev.dto.response.SupplierResp;
 import kz.iitu.itse1910.variant2issenbayev.entity.Supplier;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -12,9 +14,9 @@ import org.mapstruct.factory.Mappers;
 public interface SupplierMapper {
     SupplierMapper INSTANCE = Mappers.getMapper(SupplierMapper.class);
 
-    SupplierDto toDto(Supplier entity);
-    Supplier toEntity(SupplierDto dto);
+    SupplierResp toDto(Supplier entity);
+    Supplier toEntity(SupplierCreationReq reqDto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntityFromDto(@MappingTarget Supplier entity, SupplierDto dto);
+    void updateEntityFromDto(@MappingTarget Supplier entity, SupplierUpdateReq reqDto);
 }

@@ -4,21 +4,26 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.Cacheable;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -43,9 +48,6 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @Column(nullable = false)
-    private Integer quantity;
-
     @ManyToOne
     @JoinColumn(name = "supplier_id", nullable = false)
     private Supplier supplier;
@@ -56,7 +58,19 @@ public class Product {
     @Column(name = "retail_price", nullable = false)
     private BigDecimal retailPrice;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @Column(nullable = false)
+    private BigDecimal quantity;
+
+    @OneToOne
     @JoinColumn(name = "uom_id", unique = true)
+    @Cascade(CascadeType.SAVE_UPDATE)
     private Uom uom;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<TransactionProduct> transactionProducts;
+
+    public boolean hasAssociatedTransactions() {
+        Hibernate.initialize(transactionProducts);
+        return !transactionProducts.isEmpty();
+    }
 }

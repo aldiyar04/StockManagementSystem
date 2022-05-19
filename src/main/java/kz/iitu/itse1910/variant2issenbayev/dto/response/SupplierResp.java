@@ -1,11 +1,12 @@
-package kz.iitu.itse1910.variant2issenbayev.dto;
+package kz.iitu.itse1910.variant2issenbayev.dto.response;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class SupplierDto {
+public class SupplierResp {
+    private final Long id;
     private final String name;
     private final String phone;
     private final String email;

@@ -18,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.List;
@@ -32,7 +33,8 @@ import java.util.List;
 @AllArgsConstructor
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="user_seq_generator")
+    @SequenceGenerator(name="user_seq_generator", sequenceName = "user_id_seq", allocationSize = 1)
     private Long id;
 
     @Column(nullable = false, updatable = false)

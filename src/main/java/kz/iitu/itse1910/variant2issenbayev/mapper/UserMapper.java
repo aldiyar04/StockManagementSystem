@@ -15,8 +15,8 @@ public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     UserResp toDto(User entity);
-    User toEntity(UserSignupReq dto);
+    User toEntity(UserSignupReq reqDto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntityFromDto(@MappingTarget User entity, UserUpdateReq dto);
+    void updateEntityFromDto(@MappingTarget User entity, UserUpdateReq reqDto);
 }

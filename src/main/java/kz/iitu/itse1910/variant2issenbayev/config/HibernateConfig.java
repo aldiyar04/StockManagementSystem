@@ -82,6 +82,8 @@ public class HibernateConfig {
 
         // Fetching
         props.put("hibernate.max_fetch_depth", 3);
+        props.put("hibernate.order_inserts", true);
+        props.put("hibernate.id.optimizer.pooled.preferred", "pooled-lo");
         props.put("hibernate.jdbc.batch_size", 10);
         props.put("hibernate.jdbc.fetch_size", 50);
 
