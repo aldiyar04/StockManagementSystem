@@ -26,7 +26,6 @@ import java.math.BigDecimal;
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TransactionItem {
@@ -52,4 +51,13 @@ public class TransactionItem {
     @Cascade(CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "uom_id", unique = true, updatable = false)
     private Uom uom;
+
+    @Builder
+    public TransactionItem(Transaction transaction, Product product, BigDecimal quantity) {
+        this.transaction = transaction;
+        this.product = product;
+        this.quantity = quantity;
+        netAmount = product.getRetailPrice().multiply(quantity);
+        uom = product.getUom();
+    }
 }

@@ -13,8 +13,6 @@ public class TxItemResp {
     private final Long productId;
     private final String productName;
     private final BigDecimal quantity;
-    private final BigDecimal netAmount;
     private final String purchaseUom;
-    private final String saleUom;
-    private final Integer uomConversionRate;
+    private final BigDecimal netAmount;
 }

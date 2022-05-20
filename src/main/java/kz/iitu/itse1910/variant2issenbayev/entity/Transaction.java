@@ -7,6 +7,8 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -63,12 +65,17 @@ public class Transaction {
     private User createdBy;
 
     @OneToMany(mappedBy = "transaction", fetch = FetchType.LAZY, orphanRemoval = true)
+    @Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
     private List<TransactionItem> items;
 
     @PrePersist
-    public void setCreatedAtAndCreatedBy() {
+    public void prePersist() {
         createdAt = LocalDateTime.now();
-        createdBy = getPrincipalUser();
+        if (getPrincipalUser() != null) {
+            createdBy = getPrincipalUser();
+        }
+        netAmount = items.stream().map(TransactionItem::getNetAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public List<TransactionItem> fetchItems() {
@@ -109,6 +116,9 @@ public class Transaction {
 
     private User getPrincipalUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null) {
+            return null;
+        }
         UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
         return userDetails.getUser();
     }

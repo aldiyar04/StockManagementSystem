@@ -59,14 +59,14 @@ public class TransactionRepository {
                 .uniqueResultOptional();
     }
 
-    public Transaction save(Transaction Transaction) {
+    public Transaction save(Transaction transaction) {
         sessionFactory.getCurrentSession()
-                .saveOrUpdate(Transaction);
-        return Transaction;
+                .saveOrUpdate(transaction);
+        return transaction;
     }
 
-    public void delete(Transaction Transaction) {
+    public void delete(Transaction transaction) {
         sessionFactory.getCurrentSession()
-                .delete(Transaction);
+                .delete(transaction);
     }
 }

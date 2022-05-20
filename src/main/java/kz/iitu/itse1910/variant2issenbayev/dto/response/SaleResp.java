@@ -1,7 +1,6 @@
 package kz.iitu.itse1910.variant2issenbayev.dto.response;
 
 import kz.iitu.itse1910.variant2issenbayev.entity.Transaction;
-import kz.iitu.itse1910.variant2issenbayev.entity.User;
 import lombok.Builder;
 import lombok.Data;
 
@@ -19,6 +18,7 @@ public class SaleResp {
     private final Transaction.Status status;
     private final BigDecimal refundAmount;
     private final LocalDateTime createdAt;
-    private final User createdBy;
-    private final List<TxItemResp> items;
+    private final Long createdById;
+    private final String createdByUsername;
+    private List<TxItemResp> items;
 }

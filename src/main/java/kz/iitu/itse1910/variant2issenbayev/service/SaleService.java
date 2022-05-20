@@ -1,13 +1,13 @@
 package kz.iitu.itse1910.variant2issenbayev.service;
 
-import kz.iitu.itse1910.variant2issenbayev.dto.request.SaleCreationReq;
 import kz.iitu.itse1910.variant2issenbayev.dto.response.SaleResp;
-import kz.iitu.itse1910.variant2issenbayev.entity.Sale;
+import kz.iitu.itse1910.variant2issenbayev.dto.response.TxItemResp;
+import kz.iitu.itse1910.variant2issenbayev.entity.Customer;
 import kz.iitu.itse1910.variant2issenbayev.entity.SaleTransaction;
 import kz.iitu.itse1910.variant2issenbayev.entity.Transaction;
 import kz.iitu.itse1910.variant2issenbayev.exception.RecordNotFoundException;
-import kz.iitu.itse1910.variant2issenbayev.exception.RecordUndeletableException;
 import kz.iitu.itse1910.variant2issenbayev.mapper.SaleMapper;
+import kz.iitu.itse1910.variant2issenbayev.mapper.TxItemMapper;
 import kz.iitu.itse1910.variant2issenbayev.repository.TransactionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class SaleService {
     private final TransactionRepository txRepo;
+    private final CustomerService customerService;
 
     public List<SaleResp> getAllSales() {
         return txRepo.findAllSales().stream()
@@ -28,30 +29,37 @@ public class SaleService {
                 .collect(Collectors.toList());
     }
 
+    public List<SaleResp> getSalesByCustomer(long customerId) {
+        Customer customer = customerService.getByIdOrThrow(customerId);
+        return txRepo.findAllSalesByCustomer(customer).stream()
+                .map(SaleMapper.INSTANCE::toDto)
+                .collect(Collectors.toList());
+    }
+
     public SaleResp getSaleById(long id) {
         SaleTransaction saleTx = getByIdOrThrow(id);
-        return SaleMapper.INSTANCE.toDto(saleTx);
+        SaleResp saleResp = SaleMapper.INSTANCE.toDto(saleTx);
+
+        List<TxItemResp> itemResps = saleTx.fetchItems().stream()
+                .map(TxItemMapper.INSTANCE::toDto)
+                .collect(Collectors.toList());
+        saleResp.setItems(itemResps);
+
+        return saleResp;
     }
 
-    public SaleResp createSale(SaleCreationReq creationReq) {
-        SaleTransaction saleTx = SaleMapper.INSTANCE.toEntity(creationReq);
-        return saveSaleAndMapToDto(saleTx);
-    }
-
-    public SaleResp refundSale(long id) {
-        SaleTransaction sale = getByIdOrThrow(id);
-        return saveSaleAndMapToDto(sale);
-    }
+//    public SaleResp createSale(SaleCreationReq creationReq) {
+//        return saveSaleAndMapToDto(saleTx);
+//    }
+//
+//    public SaleResp refundSale(long id) {
+//        SaleTransaction saleTx = getByIdOrThrow(id);
+//        return saveSaleAndMapToDto(saleTx);
+//    }
 
     public void deleteSale(long id) {
-        Sale sale = getByIdOrThrow(id);
-
-        if (sale.hasAssociatedProducts()) {
-            throw new RecordUndeletableException("Sale " + sale.getName() + " cannot be deleted " +
-                    "since there are products associated with it");
-        }
-
-        txRepo.delete(sale);
+        SaleTransaction saleTx = getByIdOrThrow(id);
+        txRepo.delete(saleTx);
     }
 
     private SaleTransaction getByIdOrThrow(long id) {
@@ -63,8 +71,8 @@ public class SaleService {
         return (SaleTransaction) tx;
     }
 
-    private SaleResp saveSaleAndMapToDto(Sale sale) {
-        sale = txRepo.save(sale);
-        return SaleMapper.INSTANCE.toDto(sale);
+    private SaleResp saveSaleAndMapToDto(SaleTransaction saleTx) {
+        saleTx = (SaleTransaction) txRepo.save(saleTx);
+        return SaleMapper.INSTANCE.toDto(saleTx);
     }
 }

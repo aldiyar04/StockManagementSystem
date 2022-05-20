@@ -3,12 +3,16 @@ package kz.iitu.itse1910.variant2issenbayev;
 import kz.iitu.itse1910.variant2issenbayev.entity.Category;
 import kz.iitu.itse1910.variant2issenbayev.entity.Customer;
 import kz.iitu.itse1910.variant2issenbayev.entity.Product;
+import kz.iitu.itse1910.variant2issenbayev.entity.SaleTransaction;
 import kz.iitu.itse1910.variant2issenbayev.entity.Supplier;
+import kz.iitu.itse1910.variant2issenbayev.entity.Transaction;
+import kz.iitu.itse1910.variant2issenbayev.entity.TransactionItem;
 import kz.iitu.itse1910.variant2issenbayev.entity.Uom;
 import kz.iitu.itse1910.variant2issenbayev.entity.User;
 import kz.iitu.itse1910.variant2issenbayev.repository.CategoryRepository;
 import kz.iitu.itse1910.variant2issenbayev.repository.CustomerRepository;
 import kz.iitu.itse1910.variant2issenbayev.repository.SupplierRepository;
+import kz.iitu.itse1910.variant2issenbayev.repository.TransactionRepository;
 import kz.iitu.itse1910.variant2issenbayev.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -27,6 +31,7 @@ public class DatabaseInitializer implements CommandLineRunner {
     private final SupplierRepository supplierRepository;
     private final CategoryRepository categoryRepository;
     private final CustomerRepository customerRepository;
+    private final TransactionRepository txRepo;
 
     @Override
     public void run(String... args) throws Exception {
@@ -86,22 +91,6 @@ public class DatabaseInitializer implements CommandLineRunner {
                 .build();
         List.of(supplier1, supplier2, supplier3).forEach(supplierRepository::save);
 
-//        Category category1 = new Category("Bakery and Bread");
-//        Category category2 = new Category("Meat and Seafood");
-//        Category category3 = new Category("Pasta and Rice");
-//        Category category4 = new Category("Oils, Sauces, Salad Dressings, and Condiments");
-//        Category category5 = new Category("Cereals and Breakfast Foods");
-//        Category category6 = new Category("Soups and Canned Goods");
-//        Category category7 = new Category("Frozen Foods");
-//        Category category8 = new Category("Dairy, Cheese, and Eggs");
-//        Category category9 = new Category("Snacks and Crackers");
-//        Category category10 = new Category("Produce");
-//        Category category11 = new Category("Drinks");
-//        List<Category> categories = List.of(
-//                category1, category2, category3, category4, category5,
-//                category6, category7, category8, category9, category10, category11
-//        );
-//        categories.forEach(categoryRepository::save);
 
         Category categoryCanned = new Category("Canned");
         Product productSoup = Product.builder()
@@ -217,6 +206,62 @@ public class DatabaseInitializer implements CommandLineRunner {
                 .bonusBalance(new BigDecimal("0"))
                 .build();
         List.of(customer1, customer2, customer3).forEach(customerRepository::save);
+
+
+
+
+        SaleTransaction tx1 = SaleTransaction.builder()
+                .customer(customer1)
+                .status(Transaction.Status.COMPLETED)
+                .createdBy(salesman1)
+                .build();
+        TransactionItem tx1it1 = TransactionItem.builder()
+                .transaction(tx1)
+                .product(productSoup)
+                .quantity(new BigDecimal("1"))
+                .build();
+        TransactionItem tx1it2 = TransactionItem.builder()
+                .transaction(tx1)
+                .product(productApples)
+                .quantity(new BigDecimal("2"))
+                .build();
+        tx1.setItems(Arrays.asList(tx1it1, tx1it2));
+
+        SaleTransaction tx2 = SaleTransaction.builder()
+                .customer(customer2)
+                .status(Transaction.Status.COMPLETED)
+                .createdBy(salesman1)
+                .build();
+        TransactionItem tx2it1 = TransactionItem.builder()
+                .transaction(tx2)
+                .product(productOliveOil)
+                .quantity(new BigDecimal("1"))
+                .build();
+        TransactionItem tx2it2 = TransactionItem.builder()
+                .transaction(tx2)
+                .product(productTuna)
+                .quantity(new BigDecimal("2"))
+                .build();
+        tx2.setItems(Arrays.asList(tx2it1, tx2it2));
+
+        SaleTransaction tx3 = SaleTransaction.builder()
+                .customer(customer3)
+                .status(Transaction.Status.COMPLETED)
+                .createdBy(salesman2)
+                .build();
+        TransactionItem tx3it1 = TransactionItem.builder()
+                .transaction(tx3)
+                .product(productPotatoes)
+                .quantity(new BigDecimal("3"))
+                .build();
+        TransactionItem tx3it2 = TransactionItem.builder()
+                .transaction(tx3)
+                .product(productOnions)
+                .quantity(new BigDecimal("2.5"))
+                .build();
+        tx3.setItems(Arrays.asList(tx3it1, tx3it2));
+
+        List.of(tx1, tx2, tx3).forEach(txRepo::save);
 
 //        SaleTransaction saleTx = SaleTransaction.builder()
 //                .netAmount(new BigDecimal("4000"))
