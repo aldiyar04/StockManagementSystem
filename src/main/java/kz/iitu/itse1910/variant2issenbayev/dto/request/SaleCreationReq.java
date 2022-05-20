@@ -7,5 +7,5 @@ import java.util.List;
 @Data
 public class SaleCreationReq {
     private final Long customerId;
-    private final List<TxItemCreationReq> txItemCreationReqs;
+    private final List<TxItemCreationReq> items;
 }

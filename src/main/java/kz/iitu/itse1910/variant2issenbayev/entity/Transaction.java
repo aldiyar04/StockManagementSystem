@@ -74,6 +74,9 @@ public class Transaction {
         if (getPrincipalUser() != null) {
             createdBy = getPrincipalUser();
         }
+        if (status != null) {
+            status = Status.COMPLETED;
+        }
         netAmount = items.stream().map(TransactionItem::getNetAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }

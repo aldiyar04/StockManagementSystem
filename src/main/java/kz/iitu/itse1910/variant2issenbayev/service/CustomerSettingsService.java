@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.util.prefs.Preferences;
 
 @Service
-public class SettingsService {
+public class CustomerSettingsService {
     private final Preferences prefs = Preferences.userNodeForPackage(SettingsController.class);
 
     public int getCustomerRefundPercentage() {

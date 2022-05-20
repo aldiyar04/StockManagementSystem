@@ -53,6 +53,9 @@ public class Customer {
     @Column(name = "bonus_balance", nullable = false)
     private BigDecimal bonusBalance;
 
+    @Column(name = "times_special_bonus", nullable = false)
+    private Integer timesGivenSpecialBonus;
+
     @Column(name = "net_profit", nullable = false)
     private BigDecimal netProfit;
 
@@ -60,7 +63,8 @@ public class Customer {
     private LocalDate createdOn;
 
     @PrePersist
-    public void setProfitAndCreatedOn() {
+    public void prePersist() {
+        timesGivenSpecialBonus = 0;
         netProfit = BigDecimal.ZERO;
         createdOn = LocalDate.now();
     }
@@ -76,6 +80,14 @@ public class Customer {
     public boolean hasAssociatedTransactions() {
         Hibernate.initialize(transactions);
         return !transactions.isEmpty();
+    }
+
+    public void addBonuses(BigDecimal bonuses) {
+        bonusBalance = bonusBalance.add(bonuses);
+    }
+
+    public void addToNetProfit(BigDecimal amount) {
+        netProfit = netProfit.add(amount);
     }
 
     public String getFirstLastName() {

@@ -5,6 +5,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -21,5 +23,6 @@ import javax.persistence.ManyToOne;
 public class SaleTransaction extends Transaction {
     @ManyToOne
     @JoinColumn(name = "customer_id", updatable = false)
+    @Cascade(CascadeType.SAVE_UPDATE)
     private Customer customer;
 }

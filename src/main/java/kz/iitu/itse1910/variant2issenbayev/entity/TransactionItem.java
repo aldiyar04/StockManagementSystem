@@ -58,6 +58,7 @@ public class TransactionItem {
         this.product = product;
         this.quantity = quantity;
         netAmount = product.getRetailPrice().multiply(quantity);
-        uom = product.getUom();
+        Uom productUom = product.getUom();
+        uom = new Uom(productUom.getPurchaseUom(), productUom.getSaleUom(), productUom.getConversionRate());
     }
 }

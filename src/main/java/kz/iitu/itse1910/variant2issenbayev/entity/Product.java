@@ -22,6 +22,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.AssertTrue;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -72,5 +73,10 @@ public class Product {
     public boolean hasAssociatedTransactions() {
         Hibernate.initialize(transactionItems);
         return !transactionItems.isEmpty();
+    }
+
+    @AssertTrue(message = "Retail price cannot be <= wholesale price")
+    public boolean isProfitPositive() {
+        return retailPrice.compareTo(wholesalePrice) > 0;
     }
 }
