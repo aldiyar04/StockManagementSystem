@@ -6,9 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.Cacheable;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,7 +29,7 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TransactionProduct {
+public class TransactionItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -47,7 +48,8 @@ public class TransactionProduct {
     @Column(name = "net_amount", nullable = false, updatable = false)
     private BigDecimal netAmount;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne
+    @Cascade(CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "uom_id", unique = true, updatable = false)
     private Uom uom;
 }

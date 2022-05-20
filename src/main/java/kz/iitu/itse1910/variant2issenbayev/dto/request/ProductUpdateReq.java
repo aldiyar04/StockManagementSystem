@@ -25,14 +25,14 @@ public class ProductUpdateReq {
     @AssertTrue(message = "If you want to update UOM, all the related fields must be set. The UOM fields are " +
     "purchaseUom, saleUom, uomConversionRate.")
     boolean isUomFieldsAllSetOrAllNotSet() {
-        boolean areAllSet = isAllUomFieldsSet();
-        boolean areAllNotSet = StringUtils.isNoneBlank(purchaseUom) && StringUtils.isNoneBlank(saleUom)
-                && uomConversionRate != null;
-        return areAllSet || areAllNotSet;
+        boolean allSet = isAllUomFieldsSet();
+        boolean allNotSet = StringUtils.isBlank(purchaseUom) && StringUtils.isBlank(saleUom)
+                && uomConversionRate == null;
+        return allSet || allNotSet;
     }
 
     public boolean isAllUomFieldsSet() {
-        return StringUtils.isBlank(purchaseUom) && StringUtils.isBlank(saleUom)
-                && uomConversionRate == null;
+        return StringUtils.isNoneBlank(purchaseUom) && StringUtils.isNoneBlank(saleUom)
+                && uomConversionRate != null;
     }
 }

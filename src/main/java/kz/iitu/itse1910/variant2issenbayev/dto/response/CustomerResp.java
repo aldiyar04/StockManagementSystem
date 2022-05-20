@@ -14,5 +14,6 @@ public class CustomerResp {
     private final String phone;
     private final String email;
     private final String cardNumber;
+    private final BigDecimal netProfit;
     private final BigDecimal bonusBalance;
 }

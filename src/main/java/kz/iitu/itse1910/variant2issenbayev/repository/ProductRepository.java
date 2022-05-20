@@ -1,6 +1,7 @@
 package kz.iitu.itse1910.variant2issenbayev.repository;
 
 import kz.iitu.itse1910.variant2issenbayev.entity.Product;
+import kz.iitu.itse1910.variant2issenbayev.entity.Uom;
 import lombok.AllArgsConstructor;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
@@ -39,14 +40,20 @@ public class ProductRepository {
                 .uniqueResultOptional();
     }
 
-    public Product save(Product Product) {
+    public Product save(Product product) {
         sessionFactory.getCurrentSession()
-                .saveOrUpdate(Product);
-        return Product;
+                .saveOrUpdate(product);
+        return product;
     }
 
-    public void delete(Product Product) {
+    public Uom persistUom(Uom uom) {
         sessionFactory.getCurrentSession()
-                .delete(Product);
+                .persist(uom);
+        return uom;
+    }
+
+    public void delete(Product product) {
+        sessionFactory.getCurrentSession()
+                .delete(product);
     }
 }

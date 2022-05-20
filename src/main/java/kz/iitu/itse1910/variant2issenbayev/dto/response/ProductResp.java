@@ -18,7 +18,6 @@ public class ProductResp {
     private final BigDecimal wholesalePrice;
     private final BigDecimal retailPrice;
     private final Integer quantity;
-    private final String uomName;
     private final String purchaseUom;
     private final String saleUom;
     private final Integer uomConversionRate;

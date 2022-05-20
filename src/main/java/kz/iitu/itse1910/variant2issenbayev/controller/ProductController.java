@@ -30,13 +30,13 @@ public class ProductController {
     }
 
     @GetMapping("/categories/{categoryId}/products")
-    public List<ProductResp> getAllProductsOfCategory(@PathVariable("categoryId") long categoryId) {
-        return productService.getAllProductsOfCategory(categoryId);
+    public List<ProductResp> getProductsOfCategory(@PathVariable("categoryId") long categoryId) {
+        return productService.getProductsOfCategory(categoryId);
     }
 
     @GetMapping("/suppliers/{supplierId}/products")
-    public List<ProductResp> getAllProductsOfSupplier(@PathVariable("supplierId") long supplierId) {
-        return productService.getAllProductsOfSupplier(supplierId);
+    public List<ProductResp> getProductsOfSupplier(@PathVariable("supplierId") long supplierId) {
+        return productService.getProductsOfSupplier(supplierId);
     }
 
     @GetMapping("/products/{id}")

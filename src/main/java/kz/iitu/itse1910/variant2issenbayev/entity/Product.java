@@ -67,10 +67,10 @@ public class Product {
     private Uom uom;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    private List<TransactionProduct> transactionProducts;
+    private List<TransactionItem> transactionItems;
 
     public boolean hasAssociatedTransactions() {
-        Hibernate.initialize(transactionProducts);
-        return !transactionProducts.isEmpty();
+        Hibernate.initialize(transactionItems);
+        return !transactionItems.isEmpty();
     }
 }

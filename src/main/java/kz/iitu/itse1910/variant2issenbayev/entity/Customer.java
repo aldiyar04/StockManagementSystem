@@ -53,11 +53,15 @@ public class Customer {
     @Column(name = "bonus_balance", nullable = false)
     private BigDecimal bonusBalance;
 
+    @Column(name = "net_profit", nullable = false)
+    private BigDecimal netProfit;
+
     @Column(name = "created_on", nullable = false, updatable = false)
     private LocalDate createdOn;
 
     @PrePersist
-    public void setCreatedOn() {
+    public void setProfitAndCreatedOn() {
+        netProfit = BigDecimal.ZERO;
         createdOn = LocalDate.now();
     }
 

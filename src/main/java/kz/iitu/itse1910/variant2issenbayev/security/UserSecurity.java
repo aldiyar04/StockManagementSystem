@@ -25,7 +25,6 @@ public class UserSecurity {
                     new UsernamePasswordAuthenticationToken(loginReq.getUsername(), loginReq.getPassword())
             );
         } catch (BadCredentialsException e) {
-            String msg = e.getMessage();
             throw new InvalidCredentialsException();
         }
 

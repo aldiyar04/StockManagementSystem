@@ -33,14 +33,14 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    public List<ProductResp> getAllProductsOfCategory(long categoryId) {
+    public List<ProductResp> getProductsOfCategory(long categoryId) {
         Category category = categoryService.getByIdOrThrow(categoryId);
         return category.fetchProducts().stream()
                 .map(ProductMapper.INSTANCE::toDto)
                 .collect(Collectors.toList());
     }
 
-    public List<ProductResp> getAllProductsOfSupplier(long supplierId) {
+    public List<ProductResp> getProductsOfSupplier(long supplierId) {
         Supplier supplier = supplierService.getByIdOrThrow(supplierId);
         return supplier.fetchProducts().stream()
                 .map(ProductMapper.INSTANCE::toDto)
@@ -93,8 +93,9 @@ public class ProductService {
             product.setSupplier(newSupplier);
         }
         if (updateReq.isAllUomFieldsSet()) {
-            Uom uom = ProductMapper.INSTANCE.toUomEntity(updateReq);
-            product.setUom(uom);
+            Uom newUom = ProductMapper.INSTANCE.toUomEntity(updateReq);
+            newUom = productRepository.persistUom(newUom);
+            product.setUom(newUom);
         }
 
         return saveProductAndMapToDto(product);

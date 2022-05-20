@@ -21,32 +21,37 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/customers")
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("denyAll()")
 @AllArgsConstructor
 public class CustomerController {
     private final CustomerService customerService;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'SALESMAN')")
     public List<CustomerResp> getAllCustomers() {
         return customerService.getAllCustomers();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SALESMAN')")
     public CustomerResp getCustomerById(@PathVariable("id") long id) {
         return customerService.getCustomerById(id);
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'SALESMAN')")
     public CustomerResp createCustomer(@Valid @RequestBody CustomerCreationReq creationReq) {
         return customerService.createCustomer(creationReq);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SALESMAN')")
     public CustomerResp updateCustomer(@PathVariable("id") long id, @Valid @RequestBody CustomerUpdateReq updateReq) {
         return customerService.updateCustomer(id, updateReq);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteCustomer(@PathVariable("id") long id) {
         customerService.deleteCustomer(id);
         return ResponseEntity.noContent().build();
